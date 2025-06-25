@@ -34,7 +34,12 @@
                     <span>F.A.Q</span>
                 </a>
             </li><!-- End FAQ Nav -->
-
-    </ul>
+            
+            <li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+            </li><!-- End Profile Nav -->
 
 </aside><!-- End Sidebar-->

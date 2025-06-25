@@ -52,4 +52,6 @@ Events::on('pre_system', static function (): void {
             });
         }
     }
-});
+    
+}
+);

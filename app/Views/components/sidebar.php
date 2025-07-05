@@ -28,6 +28,14 @@
         <?php
         }
         ?>
+
+             <li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'diskon') ? "" : "collapsed" ?>" href="diskon">
+                    <i class="bi bi-tags"></i>
+                    <span>Diskon</span>
+                </a>
+            </li><!-- End FAQ Nav -->
+
             <li class="nav-item">
                 <a class="nav-link <?php echo (uri_string() == 'faq') ? "" : "collapsed" ?>" href="faq">
                     <i class="bi bi-question-circle"></i>

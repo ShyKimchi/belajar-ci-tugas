@@ -17,12 +17,15 @@ if (session()->getFlashData('success')) {
         <tr>
             <th scope="col">Nama</th>
             <th scope="col">Foto</th>
-            <th scope="col">Harga</th>
+            <th scope="col">Harga Asli</th>
+            <th scope="col">Diskon</th>
             <th scope="col">Jumlah</th>
+            <th scope="col">Harga Setelah Diskon</th>
             <th scope="col">Subtotal</th>
             <th scope="col">Aksi</th>
         </tr>
     </thead>
+
     <tbody>
         <?php
         $i = 1;
@@ -30,13 +33,19 @@ if (session()->getFlashData('success')) {
             foreach ($items as $index => $item) :
         ?>
                 <tr>
-                    <td><?php echo $item['name'] ?></td>
-                    <td><img src="<?php echo base_url() . "img/" . $item['options']['foto'] ?>" width="100px"></td>
-                    <td><?php echo number_to_currency($item['price'], 'IDR') ?></td>
-                    <td><input type="number" min="1" name="qty<?php echo $i++ ?>" class="form-control" value="<?php echo $item['qty'] ?>"></td>
-                    <td><?php echo number_to_currency($item['subtotal'], 'IDR') ?></td>
+                    <td><?= $item['name'] ?></td>
+                    <td><img src="<?= base_url("img/" . $item['options']['foto']) ?>" width="100px"></td>
                     <td>
-                        <a href="<?php echo base_url('keranjang/delete/' . $item['rowid'] . '') ?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        <del><?= number_to_currency($item['options']['harga_awal'], 'IDR') ?></del><br>
+                        <span class="badge bg-danger">-<?= number_to_currency($item['options']['diskon_dipotong'], 'IDR') ?></span>
+                    </td>
+                    <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                    <td>
+                        <input type="number" min="1" name="qty<?= $i++ ?>" class="form-control" value="<?= $item['qty'] ?>">
+                    </td>
+                    <td><?= number_to_currency($item['subtotal'], 'IDR') ?></td>
+                    <td>
+                        <a href="<?= base_url('keranjang/delete/' . $item['rowid']) ?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                     </td>
                 </tr>
         <?php
@@ -44,6 +53,7 @@ if (session()->getFlashData('success')) {
         endif;
         ?>
     </tbody>
+
 </table>
 <!-- End Table with stripped rows -->
 <div class="alert alert-info">

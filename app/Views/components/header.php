@@ -1,5 +1,6 @@
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
+  
 
 <div class="d-flex align-items-center justify-content-between">
   <a href="index.html" class="logo d-flex align-items-center">
@@ -15,6 +16,13 @@
     <button type="submit" title="Search"><i class="bi bi-search"></i></button>
   </form>
 </div><!-- End Search Bar -->
+
+<?php if (session()->has('diskon')): ?>
+  <div class="ms-3" style="background-color:rgb(49, 179, 255); color: white; padding: 6px 12px; border-radius: 6px; font-size: 14px; white-space: nowrap;">
+  Diskon Hari ini : Rp <?= number_format(session()->get('diskon'), 0, ',', '.') ?>
+  </div>
+<?php endif; ?>
+
 
 <nav class="header-nav ms-auto">
   <ul class="d-flex align-items-center">

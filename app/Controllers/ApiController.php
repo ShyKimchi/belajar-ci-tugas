@@ -21,47 +21,47 @@ class ApiController extends ResourceController
         $this->apikey = env('API_KEY');
         $this->user = new UserModel();
         $this->transaction = new TransactionModel();
-        $this->transaction_detail = new  TransactionDetailModel();
-
+        $this->transaction_detail = new TransactionDetailModel();
     }
 
-    /**
-     * Return an array of resource objects, themselves in array format.
-     *
-     * @return ResponseInterface
-     */
     public function index()
-    {
-        $data = [ 
-            'results' => [],
-            'status' => ["code" => 401, "description" => "Unauthorized"]
-        ];
+        {
+            $data = [ 
+                'results' => [],
+                'status' => ["code" => 401, "description" => "Unauthorized"]
+            ];
 
-        $headers = $this->request->headers(); 
+            $headers = $this->request->headers(); 
 
-        array_walk($headers, function (&$value, $key) {
-            $value = $value->getValue();
-        });
+            array_walk($headers, function (&$value, $key) {
+                $value = $value->getValue();
+            });
 
-        if(array_key_exists("Key", $headers)){
-            if ($headers["Key"] == $this->apikey) {
-                $penjualan = $this->transaction->findAll();
-                
-                foreach ($penjualan as &$pj) {
-                    $pj['details'] = $this->transaction_detail->where('transaction_id', $pj['id'])->findAll();
+            if(array_key_exists("Key", $headers)){
+                if ($headers["Key"] == $this->apikey) {
+                    $penjualan = $this->transaction->findAll();
+
+                    foreach ($penjualan as &$pj) {
+                        $details = $this->transaction_detail->where('transaction_id', $pj['id'])->findAll();
+
+                        // Tambah jumlah item
+                        $pj['jumlah_item'] = array_sum(array_column($details, 'jumlah'));
+
+                        // Optional: ubah status angka jadi teks
+                        $pj['status'] = $pj['status'] == 1 ? 'Selesai' : 'Belum Diproses';
+
+                        $pj['details'] = $details;
+                    }
+
+                    $data['status'] = ["code" => 200, "description" => "OK"];
+                    $data['results'] = $penjualan;
                 }
+            } 
 
-                $data['status'] = ["code" => 200, "description" => "OK"];
-                $data['results'] = $penjualan;
-
-            }
-        } 
-
-        return $this->respond($data);
-    }
+            return $this->respond($data);
+        }
 
 
-    
 
 
     /**

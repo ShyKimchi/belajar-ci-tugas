@@ -1,89 +1,173 @@
-# Toko Online CodeIgniter 4
+# 🏍️ Toko Online - CodeIgniter 4
 
-Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4](https://codeigniter.com/). Sistem ini menyediakan beberapa fungsionalitas untuk toko online, termasuk manajemen produk, keranjang belanja, dan sistem transaksi.
+Proyek ini adalah aplikasi toko online berbasis web yang dikembangkan menggunakan framework **CodeIgniter 4**. Aplikasi ini mendukung fitur penjualan produk, manajemen diskon dinamis oleh admin, keranjang belanja, sistem checkout dengan ongkir, serta integrasi Web Service API untuk dashboard eksternal.
 
-## Daftar Isi
+---
 
-- [Fitur](#fitur)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Struktur Proyek](#struktur-proyek)
+## 📌 Fitur Aplikasi
 
-## Fitur
+### 👤 Autentikasi Pengguna
 
-- Katalog Produk
-  - Tampilan produk dengan gambar
-  - Pencarian produk
-- Keranjang Belanja
-  - Tambah/hapus produk
-  - Update jumlah produk
-- Sistem Transaksi
-  - Proses checkout
-  - Riwayat transaksi
-- Panel Admin
-  - Manajemen produk (CRUD)
-  - Manajemen kategori
-  - Laporan transaksi
-  - Export data ke PDF
-- Sistem Autentikasi
-  - Login/Register pengguna
-  - Manajemen akun
-- UI Responsif dengan NiceAdmin template
+* Register dan login pengguna
+* Role: admin & user biasa
+* Manajemen sesi login
 
-## Persyaratan Sistem
+### 🍭 Produk & Diskon
 
-- PHP >= 8.2
-- Composer
-- Web server (XAMPP)
+* Menampilkan daftar produk
+* Fitur pencarian produk
+* Gambar produk
+* Diskon otomatis (jika tersedia hari ini)
 
-## Instalasi
+### 🛒 Keranjang Belanja
 
-1. **Clone repository ini**
-   ```bash
-   git clone [URL repository]
-   cd belajar-ci-tugas
-   ```
-2. **Install dependensi**
-   ```bash
-   composer install
-   ```
-3. **Konfigurasi database**
+* Tambah produk ke keranjang
+* Edit kuantitas produk
+* Hapus produk dari keranjang
+* Diskon langsung diterapkan pada total keranjang
 
-   - Start module Apache dan MySQL pada XAMPP
-   - Buat database **db_ci4** di phpmyadmin.
-   - copy file .env dari tutorial https://www.notion.so/april-ns/Codeigniter4-Migration-dan-Seeding-045ffe5f44904e5c88633b2deae724d2
+### 💵 Checkout & Transaksi
 
-4. **Jalankan migrasi database**
-   ```bash
-   php spark migrate
-   ```
-5. **Seeder data**
-   ```bash
-   php spark db:seed ProductSeeder
-   ```
-   ```bash
-   php spark db:seed UserSeeder
-   ```
-6. **Jalankan server**
-   ```bash
-   php spark serve
-   ```
-7. **Akses aplikasi**
-   Buka browser dan akses `http://localhost:8080` untuk melihat aplikasi.
+* Form alamat pengiriman
+* Pilih kelurahan dan layanan pengiriman (RajaOngkir API)
+* Hitung ongkir otomatis
+* Simpan transaksi lengkap (total, ongkir, alamat, item)
 
-## Struktur Proyek
+### 📁 Riwayat & Detail Transaksi
 
-Proyek menggunakan struktur MVC CodeIgniter 4:
+* Riwayat transaksi per pengguna
+* Detail jumlah item dan subtotal harga
 
-- app/Controllers - Logika aplikasi dan penanganan request
-  - AuthController.php - Autentikasi pengguna
-  - ProdukController.php - Manajemen produk
-  - TransaksiController.php - Proses transaksi
-- app/Models - Model untuk interaksi database
-  - ProductModel.php - Model produk
-  - UserModel.php - Model pengguna
-- app/Views - Template dan komponen UI
-  - v_produk.php - Tampilan produk
-  - v_keranjang.php - Halaman keranjang
-- public/img - Gambar produk dan aset
-- public/NiceAdmin - Template admin
+### 🎟️ Manajemen Diskon (Admin)
+
+* Admin bisa menambah, edit, dan hapus diskon
+* Diskon berdasarkan tanggal
+* Diskon berlaku otomatis jika tanggal hari ini cocok
+
+### 📊 Dashboard Eksternal (API Client)
+
+* Aplikasi dashboard sederhana (client) menampilkan data transaksi dari Web Service API
+* Tampil:
+
+  * Username
+  * Alamat
+  * Total harga
+  * Jumlah item
+  * Ongkir
+  * Status transaksi
+  * Tanggal transaksi
+
+---
+
+## ⚙️ Persyaratan Sistem
+
+* PHP >= 8.2
+* Composer
+* MySQL / MariaDB
+* Web server (XAMPP / Laragon)
+* API Key dari RajaOngkir (untuk fitur ongkir)
+* API Key internal untuk Web Service (default: `iniapinjirwkwkwk`)
+
+
+### 2. Install Dependency
+
+```bash
+composer install
+```
+
+### 3. Konfigurasi `.env`
+
+* Rename file `.env.example` → `.env`
+* Ubah konfigurasi database dan API key:
+
+  ```dotenv
+  database.default.hostname = localhost
+  database.default.database = db_ci4
+  database.default.username = root
+  database.default.password =
+  COST_KEY = API_KEY_RAJAONGKIR
+  API_KEY = iniapinjirwkwkwkw
+  ```
+
+### 4. Buat Database
+
+* Jalankan XAMPP / phpMyAdmin
+* Buat database baru dengan nama: `db_ci4`
+
+### 5. Migrasi & Seeder
+
+```bash
+php spark migrate
+php spark db:seed ProductSeeder
+php spark db:seed UserSeeder
+```
+
+### 6. Jalankan Server
+
+```bash
+php spark serve
+```
+
+Akses aplikasi di browser: [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 📂 Struktur Proyek
+
+```
+app/
+├── Controllers/
+│   ├── AuthController.php
+│   ├── DiskonController.php
+│   ├── ProdukController.php
+│   ├── TransaksiController.php
+│   └── ApiController.php
+├── Models/
+│   ├── UserModel.php
+│   ├── ProductModel.php
+│   ├── TransactionModel.php
+│   ├── TransactionDetailModel.php
+│   └── DiskonModel.php
+├── Views/
+│   ├── diskon/              # View admin untuk diskon
+│   ├── v_home.php           # Halaman produk
+│   ├── v_keranjang.php      # Keranjang belanja
+│   ├── v_checkout.php       # Form checkout
+│   ├── v_transaksi.php      # Riwayat transaksi
+│   └── layout.php           # Template layout utama
+public/
+├── img/                    # Gambar produk
+├── DashboardSederhana/     # Folder dashboard API eksternal
+.env
+README.md
+```
+
+---
+
+## 💻 Dashboard Eksternal (Client API)
+
+### Lokasi
+
+```
+public/DashboardSederhana/index.php
+```
+
+### Fitur
+
+* Tampilkan semua transaksi dari endpoint API
+* Tabel berisi:
+
+  * Username
+  * Alamat
+  * Total harga
+  * Jumlah item
+  * Ongkir
+  * Status
+  * Tanggal transaksi
+
+### Akses
+
+```
+http://localhost:8080/
+```
+
